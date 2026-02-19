@@ -72,13 +72,13 @@ jobs:
 
       - name: Start Container
         run: |
-              docker run --detach --privileged --name droidian-builder \
-              -v /tmp/buildd-results:/buildd/out \
-              -v /dev:/host-dev \
-              -v /sys/fs/cgroup:/sys/fs/cgroup \
-              -v ${PWD}:/buildd/sources \
-              --security-opt seccomp:unconfined \
-              quay.io/droidian/rootfs-builder:bookworm-amd64 /sbin/init
+          docker run --detach --privileged --name droidian-builder \
+            -v /tmp/buildd-results:/buildd/out \
+            -v /dev:/host-dev \
+            -v /sys/fs/cgroup:/sys/fs/cgroup \
+            -v ${PWD}:/buildd/sources \
+            --security-opt seccomp:unconfined \
+            quay.io/droidian/rootfs-builder:bookworm-amd64 sleep infinity
 
       - name: Build rootfs
         run: |
@@ -95,3 +95,6 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
+      - name: Cleanup container
+        if: always()
+        run: docker rm -f droidian-builder || true
