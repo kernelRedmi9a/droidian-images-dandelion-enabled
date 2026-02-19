@@ -76,7 +76,7 @@ jobs:
         run:  docker start $CONTAINER_HASH
       - name: Build rootfs
         run: |
-          docker exec $CONTAINER_HASH /bin/sh -c 'cd /buildd/sources; DROIDIAN_VERSION="${{ env.DROIDIAN_VERSION }}" ./generate_device_recipe.py ${{ matrix.config.product }} ${{ matrix.config.arch }} ${{ matrix.config.edition }} ${{ matrix.config.variant }} ${{ matrix.config.apilevel }} && debos --disable-fakemachine generated/droidian.yaml'
+          docker start $CONTAINER_HASH && docker exec $CONTAINER_HASH /bin/sh -c 'cd /buildd/sources; DROIDIAN_VERSION="${{ env.DROIDIAN_VERSION }}" ./generate_device_recipe.py ${{ matrix.config.product }} ${{ matrix.config.arch }} ${{ matrix.config.edition }} ${{ matrix.config.variant }} ${{ matrix.config.apilevel }} && debos --disable-fakemachine generated/droidian.yaml'
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
